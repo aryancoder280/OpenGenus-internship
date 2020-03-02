@@ -1,0 +1,109 @@
+//The Largest Palindromic Number By Rearranging The Digits
+#include<bits/stdc++.h>
+using namespace std;
+
+string theLargestPalindromicNumber;//This will contain the answer, right now it is empty.
+
+bool possiblePalindrome(int count[], int length)
+{
+    int numberOfOdds = 0;
+
+    for(int i=0;i<length;i++)
+    {
+        if(count[i] & 1)// it will give 1 if the count is odd otherwise 0 will be the output.
+        {
+            numberOfOdds++;
+        }
+    }
+
+    if(numberOfOdds>1)
+        return false;
+    else
+        return true;
+}
+
+void largestPalindromicNumber(string number)
+{
+    int length = number.size();
+    int count[10]={0};//to store count of digits.
+
+    //Step 1
+
+    for(int i=0;i<length;i++)
+    {
+        count[number[i] - '0']++;
+    }
+
+    // check if we can form a palindrome or not.
+
+    if(possiblePalindrome(count, length) == false)
+    {
+        cout<<"Palindrome Not Found";
+        return ;
+    }//step 1 ends
+    else
+    {
+        // Now we can make palindromic numbers from the given input.
+
+        int indexOfOddTimesOccuringDiigit = -1;// -1 indicates, no digit is occurring odd number of times.
+
+        //Step 2 starts
+
+        for(int i=9; i>=0; i--)
+        {
+                if(count[i]&1)
+                {
+                    indexOfOddTimesOccuringDiigit = i;
+                }
+                else
+                {
+                    for(int j = 0; j < count[i]/2; j++)
+                    {
+                        theLargestPalindromicNumber+= char(i + 48);
+                    }
+                    count[i]/=2;
+                }
+        }
+        //step 2 ends
+
+        //step 3 starts
+
+        if(indexOfOddTimesOccuringDiigit!=-1)
+        {
+
+            for(int i = 0; i<count[indexOfOddTimesOccuringDiigit]; i++)
+            {
+                theLargestPalindromicNumber+= char(indexOfOddTimesOccuringDiigit + 48);
+            }
+
+            count[indexOfOddTimesOccuringDiigit] = 0;
+
+        }
+        //step 3 ends
+
+        //step 4 starts
+
+        for(int i=0; i<=9; i++)
+        {
+            for(int j=0; j<count[i]; j++)
+            {
+                theLargestPalindromicNumber+= char(i + 48);
+            }
+        }
+        //step 4 ends
+    }
+    return ;
+
+}
+int main()
+{
+  string number;
+  cin>>number;
+  largestPalindromicNumber(number);
+
+  //step 5 starts
+  cout<<theLargestPalindromicNumber;
+  //step 5 ends
+  return 0;
+
+}
